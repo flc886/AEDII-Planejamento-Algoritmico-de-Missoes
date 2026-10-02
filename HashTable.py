@@ -1,22 +1,13 @@
-SEQUENCIA = [10, 17, 24, 31, 5, 12]
-
-# ---------- Parte A: Encadeamento Externo (Hashing Aberto) ----------
-
 class NoExterno:
     # No de lista encadeada alocado dinamicamente (fora do array).
-    def __init__(self, chave, valor):
-        self.chave = chave
-        self.valor = valor
+    def __init__(self, id, objeto):
+        self.id = id
+        self.objeto = objeto
         self.proximo = None
 
 
 class TabelaHash:
     LIMITE_CARGA = 0.75
-    """
-    Cada posicao do array principal guarda apenas um PONTEIRO para o
-    inicio de uma lista encadeada. Os dados ficam fora do array, em
-    memoria alocada dinamicamente (heap).
-    """
     
     def __init__(self, tamanho):
         self.tamanho = tamanho
@@ -46,6 +37,7 @@ class TabelaHash:
         for endereco in range(self.tamanho):
             nodo = self.tabela[endereco]
             while nodo is not None:
+                # Percorre a lista do endereço reposicionando os nodos
                 proximo = nodo.proximo
                 indice = self._hash(nodo.chave, novoTamanho)
                 nodo.proximo = novaTabela[indice]
@@ -57,17 +49,17 @@ class TabelaHash:
         self.fatorCarga = self.qtdElementos / self.tamanho
         self.qtsRehashings += 1
 
-    def inserir(self, chave, valor):
-        indice = self._hash(chave)
+    def inserir(self, id, objeto):
+        indice = self._hash(id)
           
         atual = self.tabela[indice]
         while atual is not None:
-            if atual.chave == chave:
-                atual.valor = valor
+            if atual.id == id:
+                atual.objeto = objeto
                 return
             atual = atual.proximo
 
-        novo = NoExterno(chave, valor)
+        novo = NoExterno(id, objeto)
         if self.tabela[indice] is not None:
             self.colisoes += 1
         novo.proximo = self.tabela[indice]
@@ -78,7 +70,20 @@ class TabelaHash:
 
         if self.fatorCarga >= self.LIMITE_CARGA:
             self._rehashing()
+            
+    def buscar(self, id):
+        atual = self.tabela[self._hash(id)]
         
+        while atual is not None:
+            if atual.id == id:
+                return atual.valor
+            
+            atual = atual.proximo
+            
+        print("Objeto não encontrado")
+        return None
+        
+    #def remover(self, id):
 
     def imprimir(self):
         print("Indice | Array principal -> Lista externa")
@@ -86,7 +91,7 @@ class TabelaHash:
             cadeia = []
             atual = self.tabela[i]
             while atual is not None:
-                cadeia.append(str(atual.chave))
+                cadeia.append(str(atual.id))
                 atual = atual.proximo
             if cadeia:
                 print(f"  [{i}]   ->  " + " -> ".join(cadeia) + " -> NULL")
