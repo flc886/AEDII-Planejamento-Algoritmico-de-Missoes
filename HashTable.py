@@ -15,9 +15,9 @@ class TabelaHash:
         self.fatorCarga = 0
         self.colisoes = 0
         self.qtdElementos = 0
-        self.qtsRehashings = 0
+        self.qtdRehashings = 0
         
-    def _hash(self, string: str, tamanho: int):
+    def _hash(self, string: str, tamanho=None):
         hashCode = 0
         expoente = len(string) - 1
         if tamanho is None:
@@ -39,7 +39,7 @@ class TabelaHash:
             while nodo is not None:
                 # Percorre a lista do endereço reposicionando os nodos
                 proximo = nodo.proximo
-                indice = self._hash(nodo.chave, novoTamanho)
+                indice = self._hash(nodo.id, novoTamanho)
                 nodo.proximo = novaTabela[indice]
                 novaTabela[indice] = nodo
                 nodo = proximo
@@ -47,7 +47,7 @@ class TabelaHash:
         self.tabela = novaTabela
         self.tamanho = novoTamanho
         self.fatorCarga = self.qtdElementos / self.tamanho
-        self.qtsRehashings += 1
+        self.qtdRehashings += 1
 
     def inserir(self, id, objeto):
         indice = self._hash(id)
@@ -76,14 +76,36 @@ class TabelaHash:
         
         while atual is not None:
             if atual.id == id:
-                return atual.valor
+                return atual.objeto
             
             atual = atual.proximo
             
-        print("Objeto não encontrado")
         return None
         
-    #def remover(self, id):
+    def remover(self, id):
+        indice = self._hash(id)
+        atual = self.tabela[indice]
+        anterior = None
+
+        while atual is not None:
+            if atual.id == id:
+                if anterior is None:
+                    # Se for a cabeça da lista
+                    self.tabela[indice] = atual.proximo
+                else:
+                    # Se for no meio ou fim
+                    anterior.proximo = atual.proximo
+                
+                atual.proximo = None
+                self.qtdElementos -= 1
+                self.fatorCarga = self.qtdElementos / self.tamanho
+            
+                return atual.objeto
+        
+            anterior = atual
+            atual = atual.proximo
+        
+        return None
 
     def imprimir(self):
         print("Indice | Array principal -> Lista externa")
@@ -97,5 +119,12 @@ class TabelaHash:
                 print(f"  [{i}]   ->  " + " -> ".join(cadeia) + " -> NULL")
             else:
                 print(f"  [{i}]   ->  NULL")
+                
+    def imprimir_metricas(self):
+        print(f"Elementos: {self.qtdElementos}")
+        print(f"Capacidade: {self.tamanho}")
+        print(f"Colisões: {self.colisoes}")
+        print(f"Fator de carga: {self.fatorCarga:.3f}")
+        print(f"Rehashings: {self.qtdRehashings}")
 
 
