@@ -4,8 +4,9 @@ SEQUENCIA = [10, 17, 24, 31, 5, 12]
 
 class NoExterno:
     # No de lista encadeada alocado dinamicamente (fora do array).
-    def __init__(self, chave):
+    def __init__(self, chave, valor):
         self.chave = chave
+        self.valor = valor
         self.proximo = None
 
 
@@ -38,7 +39,7 @@ class TabelaHash:
             
         return hashCode % tamanho
         
-    def rehashing(self):
+    def _rehashing(self):
         novoTamanho = self.tamanho * 2
         novaTabela = [None] * novoTamanho
         
@@ -76,7 +77,7 @@ class TabelaHash:
         self.fatorCarga = self.qtdElementos / self.tamanho
 
         if self.fatorCarga >= self.LIMITE_CARGA:
-            self.rehashing()
+            self._rehashing()
         
 
     def imprimir(self):
