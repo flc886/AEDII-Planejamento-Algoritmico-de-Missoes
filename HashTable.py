@@ -1,4 +1,4 @@
-import Interfaces
+from Interfaces import EstruturaIndice
 
 class NoExterno:
     # No de lista encadeada alocado dinamicamente (fora do array).
@@ -8,7 +8,7 @@ class NoExterno:
         self.proximo = None
 
 
-class TabelaHash(Interfaces):
+class TabelaHash(EstruturaIndice):
     LIMITE_CARGA = 0.75
     
     def __init__(self, tamanho=53):
@@ -26,14 +26,11 @@ class TabelaHash(Interfaces):
         
     def _hash(self, string: str, tamanho=None):
         hashCode = 0
-        expoente = len(string) - 1
         if tamanho is None:
             tamanho = self.tamanho
         
         for char in string:
-            hashCode += (ord(char) * 31 ** expoente)
-            
-            expoente -= 1
+            hashCode = (hashCode * 31 + ord(char))
             
         return hashCode % tamanho
         
@@ -147,5 +144,4 @@ class TabelaHash(Interfaces):
         print(f"Colisões: {self.colisoes}")
         print(f"Fator de carga: {self.fatorCarga:.3f}")
         print(f"Rehashings: {self.qtdRehashings}")
-
 
