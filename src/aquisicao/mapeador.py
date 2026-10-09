@@ -5,6 +5,8 @@ from modelos.corpo_celeste import CorpoCeleste
 class Mapeador:
     @staticmethod
     def mapear_corpo(dados):
+        # Traduz os nomes/campos do JSON externo para os atributos do modelo interno.
+        # get() permite que dados opcionais ausentes na API sejam representados por None.
         return CorpoCeleste(
             id=dados["id"],
             nome=dados["name"],
@@ -27,6 +29,7 @@ class Mapeador:
 
     @staticmethod
     def mapear_corpos(lista_dados):
+        # Aplica a conversão individual a cada registro recebido da API/cache.
         return [
             Mapeador.mapear_corpo(dados)
             for dados in lista_dados

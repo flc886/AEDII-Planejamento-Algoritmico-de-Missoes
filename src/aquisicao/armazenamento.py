@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 class Armazenamento:
+    # O caminho é relativo à raiz do projeto, independentemente do diretório de execução.
     CAMINHO = (
         Path(__file__).resolve().parents[2]
         / "dados"
@@ -12,11 +13,13 @@ class Armazenamento:
 
     @staticmethod
     def salvar(dados):
+        # Garante que a pasta exista antes de gravar a resposta bruta da API.
         Armazenamento.CAMINHO.parent.mkdir(
             parents=True,
             exist_ok=True
         )
 
+        # Mantém os dados em JSON legível e preserva caracteres acentuados.
         with open(
             Armazenamento.CAMINHO,
             "w",
@@ -31,9 +34,11 @@ class Armazenamento:
 
     @staticmethod
     def carregar():
+        # None sinaliza que ainda não há cópia local para usar como alternativa.
         if not Armazenamento.CAMINHO.exists():
             return None
 
+        # Lê o cache local para permitir carregar os corpos sem depender da API.
         with open(
             Armazenamento.CAMINHO,
             "r",
