@@ -49,10 +49,14 @@ def main():
     for corpo in consultas.filtrar_por_tipo("Dwarf Planet"):
         print(corpo)
 
+    print("\n=== Operação adicional: luas de Marte ===")
+    for lua in consultas.luas_de("mars"):
+        print(lua)
+
     # 4. guloso: planejamento da missao
     print("\n=== Planejamento da missão (guloso) ===")
     destinos = montar_destinos(corpos, indice.buscar)
-    planejar_missao(destinos, 50, 1500)
+    planejar_missao(destinos, 100, 5000)
 
 
 if __name__ == "__main__":
