@@ -26,10 +26,10 @@ class Armazenamento:
             encoding="utf-8"
         ) as arquivo:
             json.dump(
-                dados,
-                arquivo,
-                ensure_ascii=False,
-                indent=4
+                dados, #informações que queremos salvar
+                arquivo, # arquivo aberto no qual os dados serão escritos
+                ensure_ascii=False, #caracteres não ASCII sejam escritos diretamente
+                indent=4 #indentação de quatro espaços
             )
 
     @staticmethod
@@ -44,4 +44,4 @@ class Armazenamento:
             "r",
             encoding="utf-8"
         ) as arquivo:
-            return json.load(arquivo)
+            return json.load(arquivo) #converte json em lista de dicionarios
