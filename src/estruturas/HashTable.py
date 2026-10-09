@@ -122,22 +122,7 @@ class TabelaHash(EstruturaIndice):
                 nodo = nodo.proximo
         
         return lista
-                
-            
 
-    def imprimir(self):
-        print("Indice | Array principal -> Lista externa")
-        for i in range(self.tamanho):
-            cadeia = []
-            atual = self.tabela[i]
-            while atual is not None:
-                cadeia.append(str(atual.chave))
-                atual = atual.proximo
-            if cadeia:
-                print(f"  [{i}]   ->  " + " -> ".join(cadeia) + " -> NULL")
-            else:
-                print(f"  [{i}]   ->  NULL")
-                
     def imprimir_metricas(self):
         print(f"Elementos: {self.qtdElementos}")
         print(f"Capacidade: {self.tamanho}")

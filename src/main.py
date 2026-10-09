@@ -71,8 +71,9 @@ def mostrar_lista(corpos):
     print(f"Total: {len(corpos)}")
 
 
-# ---------- opcoes do menu ----------
+# ---------- Opções do menu ----------
 
+# Opção 1
 def opcao_consultar(consultas):
     # os ids da API sao minusculos (ex.: "terre", "lune")
     identificador = ler_texto("Id do corpo (ex.: mars, terre): ").lower()
@@ -82,7 +83,7 @@ def opcao_consultar(consultas):
     else:
         detalhar(corpo)
 
-
+# Opção 2
 def opcao_pesquisar_nome(consultas):
     nome = ler_texto("Nome (ou parte dele): ")
     if not nome:
@@ -90,21 +91,29 @@ def opcao_pesquisar_nome(consultas):
         return
     mostrar_lista(consultas.buscar_por_nome(nome))
 
-
+# Opção 3
 def opcao_filtrar_tipo(consultas):
     tipos = sorted({c.tipo for c in consultas.listar_todos() if c.tipo})
     print("Tipos disponíveis: " + ", ".join(tipos))
     tipo = ler_texto("Tipo: ")
     mostrar_lista(consultas.filtrar_por_tipo(tipo))
 
-
+# Opção 4
 def opcao_filtrar_gravidade(consultas):
     minima = ler_numero("Gravidade mínima em m/s² (ex.: 5): ")
     resultado = consultas.filtrar_por_gravidade(minima)
     resultado.sort(key=lambda c: c.gravidade, reverse=True)
-    mostrar_lista(resultado)
+    
+    if not resultado:
+        print("Nenhum resultado.")
+        return
+    for corpo in resultado[:LIMITE_LISTAGEM]:
+        print(f"  {corpo} - Gravidade: {corpo.gravidade} m/s^2")
+    if len(resultado) > LIMITE_LISTAGEM:
+        print(f"  ... e mais {len(resultado) - LIMITE_LISTAGEM}")
+    print(f"Total: {len(resultado)}")
 
-
+# Opção 5
 def opcao_luas(consultas):
     identificador = ler_texto("Id do planeta (ex.: mars, jupiter): ").lower()
     if consultas.buscar_por_id(identificador) is None:
@@ -116,7 +125,7 @@ def opcao_luas(consultas):
         return
     mostrar_lista(luas)
 
-
+# Opção 6
 def opcao_missao(destinos):
     combustivel = ler_numero(
         f"Combustível máximo em t [Enter = {COMBUSTIVEL_PADRAO}]: ", COMBUSTIVEL_PADRAO)
@@ -140,22 +149,22 @@ MENU = """
 def main():
     load_dotenv()  # le a chave da API do arquivo .env
 
-    # 1. aquisicao
+    # 1. Aquisição
     corpos = carregar_corpos()
     print(f"Corpos carregados: {len(corpos)}")
 
-    # 2. tabela hash: indexa cada corpo pelo id
-    indice = TabelaHash()
+    # 2. Tabela Hash: indexa cada corpo pelo id
+    tabela = TabelaHash()
     for corpo in corpos:
-        indice.inserir(corpo.id, corpo)
+        tabela.inserir(corpo.id, corpo)
 
     print("\n=== Métricas da Tabela Hash ===")
-    indice.imprimir_metricas()
+    tabela.imprimir_metricas()
 
-    consultas = Consultas(indice)
-    destinos = montar_destinos(corpos, indice.buscar)
+    consultas = Consultas(tabela)
+    destinos = montar_destinos(corpos, tabela.buscar)
 
-    # 3. menu interativo
+    # 3. Menu interativo
     while True:
         print(MENU)
         try:
@@ -183,7 +192,7 @@ def main():
             elif escolha == "6":
                 opcao_missao(destinos)
             elif escolha == "7":
-                indice.imprimir_metricas()
+                tabela.imprimir_metricas()
             else:
                 print("Opção inválida.")
         except (EOFError, KeyboardInterrupt):

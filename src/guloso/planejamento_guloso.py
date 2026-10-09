@@ -2,17 +2,17 @@ A_TERRA = 149_598_023 #distancia sol terra em km
 
 class Destino:
   def __init__(self, nome, combustivel, orcamento, beneficio):
-    #nome  identificao
-    #combustivel qnt gasta
-    #orcamento qnt din gasta
-    #beneficio qnt rende
+    # nome  identificao
+    # combustivel qnt gasta
+    # orcamento qnt din gasta
+    # beneficio qnt rende
 
     self.nome = nome
     self.combustivel = combustivel #ton
     self.orcamento = orcamento #mi u$$
     self.beneficio = beneficio
 
-#custo
+# Custo
 
 def calcular_custo(corpo, buscar_corpo):
   #vejo se o corpo é uma lua
