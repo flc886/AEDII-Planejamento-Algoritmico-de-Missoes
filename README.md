@@ -2,7 +2,7 @@
 
 Sistema em Python que consome a **Solar System OpenData API**, indexa os corpos celestes em uma **Tabela Hash** própria e planeja uma missão com uma **estratégia gulosa** (Opção A).
 
-**Grupo:** João Falcão (aquisição de dados), Gustavo Bergmann (Tabela Hash), Théo Chatkin (algoritmo guloso).
+**Grupo:** João Falcão (aquisição de dados), Gustavo Bergmann (Tabela Hash), Théo Chatkin (algoritmo guloso). 
 
 ## Como executar
 
