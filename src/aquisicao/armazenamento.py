@@ -15,8 +15,8 @@ class Armazenamento:
     def salvar(dados):
         # Garante que a pasta exista antes de gravar a resposta bruta da API.
         Armazenamento.CAMINHO.parent.mkdir(
-            parents=True,
-            exist_ok=True
+            parents=True,   #    permite criar também as pastas intermediárias necessárias.
+            exist_ok=True   #    não gera erro se a pasta já existir.
         )
 
         # Mantém os dados em JSON legível e preserva caracteres acentuados.
