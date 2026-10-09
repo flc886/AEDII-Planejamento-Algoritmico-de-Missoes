@@ -20,7 +20,9 @@ class Mapeador:
             periodo_orbital=dados.get("avgTempo"),
             densidade=dados.get("density"),
             luas=dados.get("moons"),
-            ao_redor_de=dados.get("aroundPlanet")
+            ao_redor_de=dados.get("aroundPlanet"),
+            temperatura_media=dados.get("avgTemp"),
+            raio_medio=dados.get("meanRadius")
         )
 
     @staticmethod

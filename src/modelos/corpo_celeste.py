@@ -16,7 +16,9 @@ class CorpoCeleste:
         periodo_orbital=None,
         densidade=None,
         luas=None,
-        ao_redor_de=None
+        ao_redor_de=None,
+        temperatura_media=None,
+        raio_medio=None,
     ):
         self.id = id
         self.nome = nome
@@ -36,6 +38,9 @@ class CorpoCeleste:
 
         self.luas = luas
         self.ao_redor_de = ao_redor_de
+
+        self.temperatura_media = temperatura_media
+        self.raio_medio = raio_medio
 
     def __str__(self):
         return (
