@@ -1,4 +1,4 @@
-from Interfaces import EstruturaIndice
+from estruturas.Interfaces import EstruturaIndice
 
 class NoExterno:
     # No de lista encadeada alocado dinamicamente (fora do array).
