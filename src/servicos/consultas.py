@@ -35,3 +35,20 @@ class Consultas:
             if corpo.gravidade is not None
             and corpo.gravidade >= gravidade_minima
         ]
+
+    # operacao adicional: luas de um planeta
+    # busca o planeta na hash, pega o id de cada lua no fim do link
+    # (".../bodies/phobos" -> "phobos") e busca a lua na hash tambem
+    # custo O(k), k = numero de luas, sem varrer todos os corpos
+    def luas_de(self, id_planeta):
+        planeta = self.indice.buscar(id_planeta)
+        if planeta is None or not planeta.luas:
+            return []
+
+        luas = []
+        for lua in planeta.luas:
+            id_lua = lua["rel"].rstrip("/").split("/")[-1]
+            corpo = self.indice.buscar(id_lua)
+            if corpo is not None:
+                luas.append(corpo)
+        return luas
