@@ -61,10 +61,11 @@ def calcular_beneficio(corpo):
 def montar_destinos(corpos, buscar_corpo):
   destinos = []
   for corpo in corpos:
-    if corpo.id == "terre":
+    if corpo.id in ("terre", "soleil"): #terra e o ponto de partida e o sol nao e destino
       continue
     comb, orc = calcular_custo(corpo, buscar_corpo)
-    destinos.append(Destino(corpo.nome_ingles, comb, orc, calcular_beneficio(corpo)))
+    nome = corpo.nome_ingles or corpo.nome or corpo.id #alguns corpos vem sem nome em ingles
+    destinos.append(Destino(nome, comb, orc, calcular_beneficio(corpo)))
 
   return destinos
 
@@ -88,7 +89,8 @@ def planejar_missao(destinos, comb_max, orc_max):
   print(f"\nCombustível: {comb_max} t | Orçamento: US$ {orc_max} mi")
   print(f"{'Destino':<12}{'Razão':>8}{'Benef':>7}{'Comb(t)':>9}{'Orç(mi)':>9}  Decisão")
 
-  for d in ordenados: # O(n)
+  MOSTRAR = 20 #so mostra os 20 primeiros da ordenacao e os aceitos, pra saida nao ficar enorme
+  for i, d in enumerate(ordenados): # O(n)
 
     #d = destino atual da lista ordenada
     if comb_usado + d.combustivel <= comb_max and orc_usado + d.orcamento <= orc_max:
@@ -99,13 +101,18 @@ def planejar_missao(destinos, comb_max, orc_max):
       decisao = "Viagem aceita"
     else:
       decisao = "Viagem rejeitada"
-    print(f"{d.nome:<12}{razao(d):>8.2f}{d.beneficio:>7}{d.combustivel:>9.2f}{d.orcamento:>9.0f}  {decisao}")
+    if i < MOSTRAR or decisao == "Viagem aceita":
+      print(f"{d.nome:<12}{razao(d):>8.2f}{d.beneficio:>7}{d.combustivel:>9.2f}{d.orcamento:>9.0f}  {decisao}")
+
+  if len(ordenados) > MOSTRAR:
+    print(f"... mais {len(ordenados) - MOSTRAR} destinos avaliados")
 
   total = sum(d.beneficio for d in selecionados)
 
   #prints mostrando oq foi usado e corpos viajados
 
   print(f"\nSelecionados: {', '.join(d.nome for d in selecionados)}")
+  print(f"Destinos avaliados: {len(ordenados)} | aceitos: {len(selecionados)} | rejeitados: {len(ordenados) - len(selecionados)}")
   print(f"Benefício total: {total}")
   print(f"Combustível usado: {comb_usado:.2f} / {comb_max} t")
   print(f"Orçamento usado:   {orc_usado:.0f} / {orc_max} mi")
